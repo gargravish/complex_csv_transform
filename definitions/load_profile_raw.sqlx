@@ -1,0 +1,7 @@
+config {
+  type: "declaration",
+  database: "raves-altostrat",
+  schema: "nged_test",
+  name: "load_profile_raw",
+  description: "Load Profile Raw data"
+}

@@ -1,0 +1,17 @@
+config {
+  type: "table",
+  schema: "nged_test",
+  name: "load_profile_final",
+  description: "Transform Load Profile raw data."
+}
+
+(
+with load_profile_transform as (
+  select * except(area_region,area_depot,location_reference_no,location_name,location_address,location_latitude,location_longitude,location_easting,location_northing,location_facility_type,raw_signatures,raw_report_start_tss,raw_report_end_tss,raw_window_sizes),
+  struct(area_region as region,area_depot as depot) as area,
+  struct(location_reference_no as reference_no,location_facility_type as facility_type,location_name as name,location_address as address,st_geogpoint(location_longitude,location_latitude) as coordinates,location_easting as easting,location_northing as northing) as location,
+  struct(raw_signatures as signatures,raw_window_sizes as window_sizes,raw_report_end_tss as end_tss,raw_report_start_tss as start_tss) as raw,
+  from ${ref("load_profile_raw")}
+)
+select * from load_profile_transform
+  )

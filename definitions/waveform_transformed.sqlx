@@ -9,10 +9,10 @@ config {
 with waveform_transform as (
   select * except(area_region,area_depot,location_reference_no,location_name,location_address,location_latitude,location_longitude,location_easting,location_northing,samples,original_signatures),
   struct(area_region as region,area_depot as depot) as area,
-  struct(location_reference_no as reference_no,location_name as name,location_address as address,location_latitude as latitude,location_longitude as longitude,location_easting as easting,location_northing as northing) as location,
+  struct(location_reference_no as reference_no,location_name as name,location_address as address,st_geogpoint(location_longitude,location_latitude) as coordinates,location_easting as easting,location_northing as northing) as location,
   array(select cast(regexp_replace(ELEM,r'^\[|\]','')as float64) from unnest(split(SAMPLES, ",")) ELEM) samples,
   CAST(JSON_EXTRACT_ARRAY(original_signatures,'$') AS ARRAY<STRING>) original_signatures
-  from ${ref("waveform")} LIMIT 5
+  from ${ref("waveform")}
 )
 select * from waveform_transform
   )
