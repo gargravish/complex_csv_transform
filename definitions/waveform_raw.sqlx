@@ -1,0 +1,7 @@
+config {
+  type: "declaration",
+  database: "raves-altostrat",
+  schema: "nged_test",
+  name: "waveform",
+  description: "Waveform Raw data"
+}

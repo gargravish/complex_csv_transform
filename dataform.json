@@ -1,0 +1,8 @@
+{
+  "defaultSchema": "nged_test",
+  "assertionSchema": "nged_test",
+  "warehouse": "bigquery",
+  "defaultDatabase": "raves-altostrat",
+  "defaultLocation": "europe-west2"
+}
+    
