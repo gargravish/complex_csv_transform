@@ -1,5 +1,5 @@
 config {
-  type: "table",
+  type: "incremental",
   schema: "nged_test",
   name: "load_profile_final",
   description: "Transform Load Profile raw data."

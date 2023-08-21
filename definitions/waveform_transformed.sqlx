@@ -1,5 +1,5 @@
 config {
-  type: "table",
+  type: "incremental",
   schema: "nged_test",
   name: "waveform_final",
   description: "Transform waveform raw data."
