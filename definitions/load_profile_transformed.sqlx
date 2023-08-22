@@ -7,11 +7,15 @@ config {
 
 (
 with load_profile_transform as (
-  select * except(area_region,area_depot,location_reference_no,location_name,location_address,location_latitude,location_longitude,location_easting,location_northing,location_facility_type,raw_signatures,raw_report_start_tss,raw_report_end_tss,raw_window_sizes),
+  select * except(area_region,area_depot,location_reference_no,location_name,location_address,location_latitude,location_longitude,location_easting,location_northing,location_facility_type,raw_signatures,raw_report_start_tss,raw_report_end_tss,raw_window_sizes,v_max, v_mean, v_min, v_thd, v_fundamental,v_harmonics,i_max, i_mean, i_min, i_vec, i_thd, i_fundamental, i_harmonics,freq_max, freq_mean, freq_min),
   struct(area_region as region,area_depot as depot) as area,
+  struct(v_max as max, v_mean as mean, v_min as min, v_thd as thd, v_fundamental as fundamental,v_harmonics as harmonics) as v,
+  struct(i_max as max, i_mean as mean, i_min as min, i_vec as vec,i_thd as thd, i_fundamental as fundamental,i_harmonics as harmonics) as i,
+  struct(freq_max as max, freq_mean as mean, freq_min as min) as freq,
   struct(location_reference_no as reference_no,location_facility_type as facility_type,location_name as name,location_address as address,st_geogpoint(location_longitude,location_latitude) as coordinates,location_easting as easting,location_northing as northing) as location,
-  struct(raw_signatures as signatures,raw_window_sizes as window_sizes,raw_report_end_tss as end_tss,raw_report_start_tss as start_tss) as raw,
+  struct(raw_signatures as signatures,raw_window_sizes as window_sizes,raw_report_end_tss as end_tss,raw_report_start_tss as start_tss) as raw
   from ${ref("load_profile_raw")}
 )
 select * from load_profile_transform
+${when(incremental(), `WHERE recorded > (SELECT MAX(recorded) FROM ${self()})`) }
   )

@@ -15,4 +15,5 @@ with waveform_transform as (
   from ${ref("waveform")}
 )
 select * from waveform_transform
+${when(incremental(), `WHERE recorded > (SELECT MAX(recorded) FROM ${self()})`) }
   )
