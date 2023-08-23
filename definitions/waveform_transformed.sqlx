@@ -12,8 +12,8 @@ with waveform_transform as (
   struct(location_reference_no as reference_no,location_name as name,location_address as address,st_geogpoint(location_longitude,location_latitude) as coordinates,location_easting as easting,location_northing as northing) as location,
   array(select cast(regexp_replace(ELEM,r'^\[|\]','')as float64) from unnest(split(SAMPLES, ",")) ELEM) samples,
   CAST(JSON_EXTRACT_ARRAY(original_signatures,'$') AS ARRAY<STRING>) original_signatures
-  from ${ref("waveform")}
+  from ${ref("waveform_raw")}
 )
 select * from waveform_transform
-${when(incremental(), `WHERE recorded > (SELECT MAX(recorded) FROM ${self()})`) }
+${when(incremental(), `WHERE dt > (SELECT MAX(dt) FROM ${self()})`) }
   )

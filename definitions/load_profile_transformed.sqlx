@@ -17,5 +17,5 @@ with load_profile_transform as (
   from ${ref("load_profile_raw")}
 )
 select * from load_profile_transform
-${when(incremental(), `WHERE recorded > (SELECT MAX(recorded) FROM ${self()})`) }
+${when(incremental(), `WHERE dt > (SELECT MAX(dt) FROM ${self()})`) }
   )
